@@ -49,8 +49,10 @@ Notes / assumptions
   the timing script measures this implementation directly.
 * Run from the repo root (or anywhere): the repo root (parent directory of
   scripts/) is added to sys.path automatically.
-* GPU note: the paper reports timings measured on an NVIDIA GeForce RTX 3090;
-  re-run this script on that machine so the table matches the manuscript.
+* GPU note: the main training runs used an NVIDIA GeForce RTX 3090, while the
+  archived parameter/latency CSV was generated separately on an NVIDIA
+  GeForce RTX 4090 with PyTorch 2.4.1 and CUDA 12.1. Re-run this script on the
+  target hardware before comparing latency or memory values with the artifact.
 
 Usage (on the authors' Linux server with PyTorch):
     python scripts/param_latency.py
@@ -391,7 +393,8 @@ def main():
           f" | warmup={cfg['warmup']} | iters={cfg['iters']}")
     if device.type == "cuda":
         print(f"# GPU: {torch.cuda.get_device_name(device)}")
-    print("# NOTE: the paper reports timings measured on an NVIDIA GeForce RTX 3090.")
+    print("# NOTE: archived paper timings use an NVIDIA GeForce RTX 4090 / PyTorch 2.4.1 / CUDA 12.1;")
+    print("#       main training runs used an NVIDIA GeForce RTX 3090.")
     print(f"# torch {torch.__version__}\n")
 
     rows = []
