@@ -1,0 +1,10 @@
+{
+  "d_model": 128,
+  "d_ff": 128,
+  "e_layers": 1,
+  "top_k": 5,
+  "num_kernels": 4,
+  "_study": "timesnet_7-First-Solar_Summer_h1",
+  "_valid_mae": 0.11479999870061874,
+  "_n_trials": 30
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+data/**/*.csv
+results/*
+!results/best_params_*.json
+analysis/
+logs/
+*.pt
+*.pth
+*.db
+*.sqlite*

@@ -1,0 +1,13 @@
+{
+  "d_model": 256,
+  "d_ff": 512,
+  "e_layers": 3,
+  "d_layers": 1,
+  "n_heads": 2,
+  "moving_avg": 25,
+  "modes": 32,
+  "mode_select": "low",
+  "_study": "fedformer_7-First-Solar_Spring_h1",
+  "_valid_mae": 0.11860000342130661,
+  "_n_trials": 30
+}

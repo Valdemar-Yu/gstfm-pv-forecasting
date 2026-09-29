@@ -1,0 +1,13 @@
+{
+  "d_model": 128,
+  "d_ff": 512,
+  "e_layers": 3,
+  "d_layers": 1,
+  "n_heads": 2,
+  "moving_avg": 25,
+  "modes": 8,
+  "mode_select": "random",
+  "_study": "fedformer_7-First-Solar_Summer_h1",
+  "_valid_mae": 0.13210000097751617,
+  "_n_trials": 30
+}

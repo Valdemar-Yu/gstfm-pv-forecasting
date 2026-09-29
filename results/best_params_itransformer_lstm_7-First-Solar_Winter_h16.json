@@ -1,0 +1,10 @@
+{
+  "dim_embed": 64,
+  "depth": 2,
+  "heads": 2,
+  "dim_lstm": 128,
+  "depth_lstm": 4,
+  "_study": "itransformer_lstm_7-First-Solar_Winter_h1",
+  "_valid_mae": 0.023000000044703484,
+  "_n_trials": 30
+}

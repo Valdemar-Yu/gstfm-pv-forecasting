@@ -1,0 +1,154 @@
+[
+  {
+    "file": "data/1B/Autumn_1B_2019_2023_h.csv",
+    "sha256": "a67a925925e63e11cd974e5ec894beded07292a7e84a4b56056d8fe8e7cd61cd",
+    "rows": 8766,
+    "train_rows": 7012,
+    "validation_rows": 878,
+    "test_hours": 876,
+    "test_start": "2022/4/22 18:00",
+    "test_end": "2022/5/31 23:00",
+    "daylight_test_hours": 412,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/1B/Spring_1B_2019_2023_h.csv",
+    "sha256": "98f74d5ad947f43e83623cced5fc78fbe4b05bfb66631c12cd3ba8d260543fbb",
+    "rows": 8546,
+    "train_rows": 6836,
+    "validation_rows": 856,
+    "test_hours": 854,
+    "test_start": "2022/10/26 10:00",
+    "test_end": "2022/11/30 23:00",
+    "daylight_test_hours": 477,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/1B/Summer_1B_2019_2023_h.csv",
+    "sha256": "ba695bf8e6113d4b6fe9cee17f6eefae76c7afef9aab6fc3681dd09be59e26b0",
+    "rows": 8064,
+    "train_rows": 6451,
+    "validation_rows": 807,
+    "test_hours": 806,
+    "test_start": "2023/1/20 5:00",
+    "test_end": "2023/2/28 23:00",
+    "daylight_test_hours": 469,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/1B/Winter_1B_2019_2023_h.csv",
+    "sha256": "14f322723bf982e4ba7e1de373cc60316b0250e14a22397ff54f535d379abda4",
+    "rows": 8801,
+    "train_rows": 7040,
+    "validation_rows": 881,
+    "test_hours": 880,
+    "test_start": "2022/7/26 8:00",
+    "test_end": "2022/8/31 23:00",
+    "daylight_test_hours": 441,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/7-First-Solar/Autumn_7-First-Solar_2019_2022_h.csv",
+    "sha256": "0877d9589b5ce21485492e7d826e774980bad342ba9cd8223bf3e1d857e3f673",
+    "rows": 6624,
+    "train_rows": 5299,
+    "validation_rows": 663,
+    "test_hours": 662,
+    "test_start": "2021/5/4 10:00",
+    "test_end": "2021/5/31 23:00",
+    "daylight_test_hours": 297,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/7-First-Solar/Spring_7-First-Solar_2019_2022_h.csv",
+    "sha256": "a594055741cfd0d6459b448502979dc394e3684ce54efadea90ba3061de20017",
+    "rows": 6362,
+    "train_rows": 5089,
+    "validation_rows": 637,
+    "test_hours": 636,
+    "test_start": "2021/11/4 12:00",
+    "test_end": "2021/11/30 23:00",
+    "daylight_test_hours": 326,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/7-First-Solar/Summer_7-First-Solar_2019_2022_h.csv",
+    "sha256": "b276f057a79d4b37f3ff8718ad3d45c19d4829b0146ab1c9ae24e1df036fc6d7",
+    "rows": 6053,
+    "train_rows": 4842,
+    "validation_rows": 606,
+    "test_hours": 605,
+    "test_start": "2022/2/3 19:00",
+    "test_end": "2022/2/28 23:00",
+    "daylight_test_hours": 300,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  },
+  {
+    "file": "data/7-First-Solar/Winter_7-First-Solar_2019_2022_h.csv",
+    "sha256": "49c457cb10b3a196957a961dd905d728f7ed4cf60fd0f3415e6639b539399e94",
+    "rows": 6593,
+    "train_rows": 5274,
+    "validation_rows": 660,
+    "test_hours": 659,
+    "test_start": "2021/8/3 6:00",
+    "test_end": "2021/8/30 16:00",
+    "daylight_test_hours": 300,
+    "columns": [
+      "date",
+      "Active_Power",
+      "Weather_Temperature_Celsius",
+      "Weather_Relative_Humidity",
+      "Global_Horizontal_Radiation",
+      "Diffuse_Horizontal_Radiation"
+    ]
+  }
+]

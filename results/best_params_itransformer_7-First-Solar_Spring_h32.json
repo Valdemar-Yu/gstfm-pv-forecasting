@@ -1,0 +1,8 @@
+{
+  "dim": 128,
+  "depth": 6,
+  "heads": 8,
+  "_study": "itransformer_7-First-Solar_Spring_h1",
+  "_valid_mae": 0.08789999783039093,
+  "_n_trials": 30
+}

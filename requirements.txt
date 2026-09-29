@@ -1,0 +1,13 @@
+torch>=2.0
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib
+tqdm
+optuna
+einops>=0.6
+sympy
+dill
+beartype
+packaging

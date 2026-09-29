@@ -1,0 +1,13 @@
+{
+  "dim_embed": 32,
+  "depth_lstm": 3,
+  "depth": 3,
+  "heads": 16,
+  "dim_lstm": 256,
+  "gate_width": 8,
+  "gate_depth": 3,
+  "gate_channel": true,
+  "_study": "gstfm_7-First-Solar_Summer_h1",
+  "_valid_mae": 0.1096000000834465,
+  "_n_trials": 40
+}

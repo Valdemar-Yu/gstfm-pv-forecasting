@@ -1,0 +1,13 @@
+{
+  "dim_embed": 256,
+  "depth_lstm": 2,
+  "depth": 6,
+  "heads": 12,
+  "dim_lstm": 256,
+  "gate_width": 8,
+  "gate_depth": 3,
+  "gate_channel": false,
+  "_study": "gstfm_7-First-Solar_Winter_h1",
+  "_valid_mae": 0.023099999874830246,
+  "_n_trials": 40
+}
