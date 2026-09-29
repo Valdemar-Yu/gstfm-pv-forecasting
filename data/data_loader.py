@@ -30,7 +30,7 @@ class data_detime(Dataset):
 def split_data_cnn(data, train, test, lookback_length):
     # data = data.loc[~(data['gen'] == 0)]
     for column in list(data.columns[data.isnull().sum() > 0]):
-        data[column].interpolate(method='linear', limit_direction='forward')
+        data[column] = data[column].interpolate(method='linear', limit_direction='forward')
     timestamp = data[['date']]
     timestamp['date'] = pd.to_datetime(timestamp.date)
     cols = list(data.columns)

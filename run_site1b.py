@@ -3,7 +3,7 @@
 Sweeps all baseline models plus the full GSTFM model at h=1 over the four
 seasons of site 1B. Baselines are run in-process through train_baseline.main;
 GSTFM is run as a subprocess of train_gstfm.py. Results are appended to
-results/site1b.csv (header written only if the file is new) and combos that
+results/site1b_transfer.csv (header written only if the file is new) and combos that
 are already present in the CSV are skipped, so an interrupted sweep resumes
 cleanly.
 
@@ -17,6 +17,7 @@ Run from the repo root:
 """
 
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -96,13 +97,59 @@ def call_baseline(model: str, site: str, season: str, pred_len: int, seed: int,
     ]
     if extra_args:
         argv += list(extra_args)
-    train_baseline.main(train_baseline.build_arg_parser().parse_args(argv))
+    args = train_baseline.build_arg_parser().parse_args(argv)
+    if model != "persistence":
+        args.arch = train_baseline.load_tuned_arch(model, "7-First-Solar", season, 1)
+        if args.arch is None:
+            raise FileNotFoundError(f"missing Site 7 H=1 config: {model}/{season}")
+        args.use_tuned = False
+    train_baseline.main(args)
     return True
+
+
+GSTFM_TUNABLE_KEYS = (
+    "dim_embed", "depth", "heads", "dim_lstm", "depth_lstm",
+    "gate_width", "gate_depth", "gate_channel", "gate_residual",
+)
+
+
+def load_site7_gstfm_args(season: str, pred_len: int):
+    """Return Site 7's selected GSTFM architecture for cross-site transfer.
+
+    Site 1B is an evaluation-only transfer experiment.  Its GSTFM architecture
+    must therefore come from the Site 7 H=1 selection and must not be selected
+    from Site 1B validation data.
+    """
+    path = os.path.join(REPO_ROOT, "results",
+                        f"best_params_7-First-Solar_{season}_h1.json")
+    if not os.path.isfile(path):
+        raise FileNotFoundError(
+            f"missing Site 7 GSTFM config for transfer: {path}; "
+            "run the Site 7 GSTFM search first")
+    with open(path, "r", encoding="utf-8") as f:
+        best = json.load(f)
+    study = str(best.get("_study", ""))
+    if not study.startswith("gstfm_7-First-Solar_"):
+        raise ValueError(f"unexpected GSTFM transfer config provenance in {path}: {study!r}")
+    missing = [k for k in GSTFM_TUNABLE_KEYS
+               if k not in best and k not in {"gate_residual"}]
+    if missing:
+        raise ValueError(f"incomplete GSTFM transfer config {path}: missing {missing}")
+    args = []
+    for key in GSTFM_TUNABLE_KEYS:
+        if key not in best:
+            continue
+        value = best[key]
+        if key in {"gate_channel", "gate_residual"}:
+            value = str(bool(value)).lower()
+        args.extend([f"--{key}", str(value)])
+    print(f"[gstfm] transferring Site 7 config {path}: {best}")
+    return args
 
 
 def call_gstfm(site: str, season: str, pred_len: int, seed: int,
                results_csv: str, extra_args=None) -> bool:
-    """Run the full GSTFM model via train_gstfm.py as a subprocess."""
+    """Run GSTFM with the selected Site 7 architecture for transfer tests."""
     cmd = [
         sys.executable, os.path.join(REPO_ROOT, "train_gstfm.py"),
         "--site", site,
@@ -133,8 +180,7 @@ def sigma_train_per_season(site: str, train_frac: float = 0.8):
         df = pd.read_csv(path, header=0)
         y = np.maximum(df["Active_Power"].to_numpy(dtype=float), 0.0)
         n_train = int(len(y) * train_frac)
-        # nanstd: StandardScaler ignores NaNs when fitting (the loader's
-        # interpolate call is a no-op, so NaNs can reach the scaler).
+        # The archived processed inputs contain no missing cells.
         sigmas[season] = float(np.nanstd(y[:n_train], ddof=0))
     return sigmas
 
@@ -165,7 +211,7 @@ def main(argv=None):
     parser.add_argument("--seed", type=int, default=42, help="random seed (default 42)")
     parser.add_argument("--device", type=str, default="auto",
                         help="training device passed to every model, e.g. cuda:1")
-    parser.add_argument("--results_csv", default=os.path.join("results", "site1b.csv"),
+    parser.add_argument("--results_csv", default=os.path.join("results", "site1b_transfer.csv"),
                         help="output CSV (relative to repo root)")
     parser.add_argument("--sigma_only", action="store_true",
                         help="only print the per-season sigma_train report, no training")
@@ -194,8 +240,9 @@ def main(argv=None):
                   f"h={args.pred_len} / seed={args.seed}")
             try:
                 if model == "gstfm":
+                    transfer_args = load_site7_gstfm_args(season, args.pred_len)
                     ok = call_gstfm(args.site, season, args.pred_len, args.seed,
-                                    results_csv, ["--device", args.device])
+                                    results_csv, ["--device", args.device] + transfer_args)
                 else:
                     ok = call_baseline(model, args.site, season, args.pred_len,
                                        args.seed, results_csv, ["--device", args.device])
@@ -209,6 +256,7 @@ def main(argv=None):
         print("\n[warn] failed combos (rerun this script to retry, finished ones are skipped):")
         for key in failures:
             print(f"  {key}")
+        raise SystemExit(1)
 
     # sigma_train report so the paper can define the percentage scale for 1B
     print_sigma_report(args.site)

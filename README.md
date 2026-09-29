@@ -16,11 +16,14 @@ python run_seed_gstfm.py --device cuda:0 --pred_lens 1 16 32 64
 python run_seed_baselines.py --device cuda:0 --model timesnet
 python run_ablation.py --device cuda:0
 python run_site1b.py --device cuda:0
+python scripts/profile_selected.py --device cuda:0 --out results/selected_profile.csv
 ```
 
-The selected architectures are stored in `results/best_params_*.json`. Search drivers use validation MAE and the manuscript protocol (30 trials per baseline; 40 trials for GSTFM) at H=1; selected architectures are then held fixed across H=16, 32 and 64. Run `python run_optuna_baseline.py --device cuda:0` and `python run_optuna_gstfm.py --device cuda:0` to repeat the searches.
+The selected architectures are stored in `results/best_params_*.json`. Search drivers use validation MAE and the manuscript protocol (30 trials for each trainable baseline; Persistence is parameter-free; 40 trials for GSTFM) at H=1; selected architectures are then held fixed across H=16, 32 and 64. The Site 1B driver loads the Site 7 GSTFM configuration explicitly for each season and does not tune GSTFM on Site 1B. Run `python run_optuna_baseline.py --device cuda:0` and `python run_optuna_gstfm.py --device cuda:0` to repeat the searches.
 
 The training loader fits a `StandardScaler` on the training rows only, applies it to validation and test rows, clips negative target power to zero, and uses a 24-hour lookback. The test windows and daylight counts are recorded in `data/input_manifest.json`. Direct multi-output horizons overlap at their forecast origins; they are not independent samples.
+
+The profiling script instantiates the exact H=1 selected architectures, reports trainable parameter counts for all four seasons, and optionally measures batch-1 and batch-32 latency and peak GPU memory. These measurements are hardware- and software-specific; the manuscript artifact was collected on an RTX 4090 with PyTorch 2.4.1 and CUDA 12.1.
 
 To compute reference skill scores from a result CSV:
 
