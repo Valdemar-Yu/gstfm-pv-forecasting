@@ -45,9 +45,8 @@ Notes / assumptions
 * The AGCF (classical AGCF unit) lazily creates its input projection
   (`proj_in`) on the first forward call, therefore ONE forward pass is run
   before counting parameters (done uniformly for all models).
-* If PennyLane is installed on the server, the AGCF falls back to a per-sample
-  Python loop over the qnode -- the measured B=32 latency then honestly
-  includes that loop. Without PennyLane a classical surrogate MLP is used.
+* The public package uses the classical bounded MLP gate described in the manuscript;
+  the timing script measures this implementation directly.
 * Run from the repo root (or anywhere): the repo root (parent directory of
   scripts/) is added to sys.path automatically.
 * GPU note: the paper reports timings measured on an NVIDIA GeForce RTX 3090;
@@ -176,14 +175,14 @@ def build_itransformer_lstm(cfg):
                              **HYBRID_HP)
 
 
-def build_qstfm_gated(cfg):
+def build_gstfm_gated(cfg):
     """GSTFM / gated-fusion model -- models/iTransformer_LSTM_agcf.py with use_agcf=True.
 
     Uses the same backbone hyper-parameters as the base hybrid; gating knobs
     at their module defaults (gate_width=6, gate_depth=3, gate_residual=True).
     """
-    from models.iTransformer_LSTM_agcf import iTransformer_LSTM as QGatedModel
-    return QGatedModel(input_size=cfg["features"],
+    from models.iTransformer_LSTM_agcf import iTransformer_LSTM as GSTFMModel
+    return GSTFMModel(input_size=cfg["features"],
                        length_pre=cfg["pred_len"],
                        length_input=cfg["lookback"],
                        use_agcf=True,
@@ -225,7 +224,7 @@ MODELS = [
     ("TCN", build_tcn),
     ("iTransformer", build_itransformer),
     ("iTransformer-LSTM", build_itransformer_lstm),
-    ("GSTFM (gated)", build_qstfm_gated),
+    ("GSTFM (gated)", build_gstfm_gated),
     ("DLinear", build_dlinear),
     ("TimesNet", build_timesnet),
     ("FEDformer", build_fedformer),

@@ -6,8 +6,7 @@ import torch.nn as nn
 from models import iTransformer_block, CrossAttention
 from models.KAN import KAN
 
-# Classical AGCF implementation. Historical names are retained solely for
-# checkpoint and configuration compatibility; no classical backend is loaded.
+# Classical AGCF implementation. The public package contains the classical bounded MLP gate used in the reported runs.
 
 class BoundedMLPGate(nn.Module):
     """GELU MLP with a tanh-bounded output.
@@ -43,26 +42,24 @@ class ClassicalAGCF(nn.Module):
         self.gate_width = gate_width
         self.depth = depth
 
-        self.backend = "surrogate"
-        self.thetas = None
         exp_out = gate_width
-        self.surr = BoundedMLPGate(in_dim=gate_width, gate_width=gate_width,
+        self.gate_mlp = BoundedMLPGate(in_dim=gate_width, gate_width=gate_width,
                                   depth=depth, out_dim=exp_out)
 
         # Bounded projection: input -> latent gate descriptor
         if in_dim is None:
             raise ValueError('ClassicalAGCF requires in_dim at construction')
         self.proj_in = nn.Linear(in_dim, gate_width, bias=True)
-        # linear map from expvals -> heads, then sigmoid to (0,1)
+        # linear map from bounded gate features to heads, then sigmoid to (0,1)
         self.proj = nn.Linear(exp_out, heads)
 
     def forward(self, x_pool: torch.Tensor, t_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
         z = x_pool if t_emb is None else torch.cat([x_pool, t_emb], dim=-1)
-        zq = torch.tanh(self.proj_in(z)) * math.pi  # map to [-pi, pi]
+        z_bounded = torch.tanh(self.proj_in(z)) * math.pi  # bounded numeric range
 
-        expvals = self.surr(zq)
+        gate_features = self.gate_mlp(z_bounded)
 
-        g = torch.sigmoid(self.proj(expvals))  # [B, H]
+        g = torch.sigmoid(self.proj(gate_features))  # [B, H]
         return g
 
 
@@ -91,7 +88,7 @@ class iTransformer_LSTM(nn.Module):
 
     Args (new knobs)
     ---------
-    gate_type:      'agcf' (legacy identifier for classical AGCF) | 'se'
+    gate_type:      'agcf' (classical AGCF) | 'se'
                     (standard squeeze-excitation) | 'none' (no gate)
     use_agcf:        deprecated bool alias. True -> gate_type='agcf',
                     False -> gate_type='none'. Ignored when gate_type is given

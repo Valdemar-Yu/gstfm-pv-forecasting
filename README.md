@@ -10,7 +10,7 @@ Use Python 3.9+ and a CUDA-enabled PyTorch installation for training. Install th
 
 ```bash
 python scripts/check_inputs.py
-python verify_facts.py
+python scripts/verify_facts.py
 python run_multi_horizon.py --device cuda:0
 python run_seed_gstfm.py --device cuda:0 --pred_lens 1 16 32 64
 python run_seed_baselines.py --device cuda:0 --model timesnet

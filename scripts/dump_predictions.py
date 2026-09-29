@@ -125,8 +125,8 @@ def build_model(model_key, torch, pred_len=1, hparams=None):
     if model_key in ("agcf", "gstfm"):
         # Gated-fusion variant ('gstfm' is train_gstfm.py's checkpoint tag):
         # same backbone + classical AGCF unit enabled (train_gstfm.py defaults).
-        from models.iTransformer_LSTM_agcf import iTransformer_LSTM as QGatedModel
-        return QGatedModel(input_size=INPUT_SIZE, length_pre=pred_len,
+        from models.iTransformer_LSTM_agcf import iTransformer_LSTM as GSTFMModel
+        return GSTFMModel(input_size=INPUT_SIZE, length_pre=pred_len,
                            dim_lstm=hp.get("dim_lstm", 128),
                            depth_lstm=hp.get("depth_lstm", 3),
                            length_input=LOOKBACK,
