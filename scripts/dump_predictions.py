@@ -92,16 +92,15 @@ def resolve_repo(repo_arg):
             return os.path.abspath(cand)
     raise FileNotFoundError(
         "Could not locate the repo root (needs data/, models/, utils/). "
-        "Pass it explicitly with --repo /path/to/GSTFM-revision")
+        "Pass it explicitly with --repo /path/to/gstfm-pv-forecasting")
 
 
 def build_model(model_key, torch, pred_len=1, hparams=None):
     """Instantiate a model with this repo's training-driver hyperparameters.
 
     Only used when the checkpoint turns out to be a state_dict.
-    Imports are done lazily so that e.g. the agcf module (which may need
-    Python >= 3.10 for its type hints / optional pennylane) is only touched
-    when actually requested.
+    Imports are done lazily so that the AGCF module is only touched when
+    the gated model is actually requested.
 
     NOTE(review): the hybrid backbone defaults below follow THIS repo's
     trainers (train_gstfm.py / train_baseline.py: dim_embed=128, dim_lstm=128,
